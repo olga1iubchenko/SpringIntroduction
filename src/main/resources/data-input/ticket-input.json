@@ -1,0 +1,12 @@
+{"id":333,
+  "eventEntity": {
+    "id":111,
+    "title":"Game Of Thrones",
+    "date":"2020-12-12"},
+  "userEntity":{
+     "id":222,
+       "name":"Jon Snow",
+       "email":"jon.snow@gmail.com"
+  },
+   "category":"PREMIUM",
+   "place":25}

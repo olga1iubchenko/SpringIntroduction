@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/p ">
+
+    <!--  LOGGING -->
+    <bean id="log4j" class="com/springbootintro/aspect/LoggingAspect.java" />
+
+    <!--  DAO -->
+    <bean id="eventDAO" class="com.springbootintro.business.repository.dao.EventDAO.java"/>
+    <bean id="ticketDao" class="com.springbootintro.business.repository.dao.TicketDAO.java"/>
+    <bean id="userDAO" class="com.springbootintro.business.repository.dao.UserDAO.java"/>
+
+    <!--  CONTROLLERS -->
+    <bean id="eventController" class="com.springbootintro.controller.EventController.java"/>
+    <bean id="ticketController" class="com.springbootintro.controller.TicketController.java"/>
+    <bean id="userController" class="com.springbootintro.controller.UserController.java"/>
+
+    <!--  SERVICES -->
+    <bean id="bookingService" class="com.springbootintro.business.service.BookingFacadeService.java">
+        <constructor-arg index="0" ref="eventService"/>
+        <constructor-arg index="1" ref="ticketService"/>
+        <constructor-arg index="2" ref="userService"/>
+    </bean>
+    <bean id="eventService" class="com.springbootintro.business.service.EventService.java">
+        <constructor-arg index="0" ref="eventEntity"/>
+        <constructor-arg index="1" ref="eventDao"/>
+    </bean>
+    <bean id="ticketService" class="com.springbootintro.business.service.TicketService.java" init-method="initBean">
+        <constructor-arg index="0" ref="eventEntity"/>
+        <constructor-arg index="1" ref="userEntity"/>
+        <constructor-arg index="2" ref="ticketEntity"/>
+        <constructor-arg index="3" ref="ticketDao"/>
+    </bean>
+    <bean id="userService" class="com.springbootintro.business.service.UserService.java" init-method="initBean">
+        <constructor-arg index="0" ref="userEntity"/>
+        <constructor-arg index="1" ref="usertDao"/>
+    </bean>
+
+    <!--  ENTITIES -->
+    <bean id="eventEntity" class="com.springbootintro.business.domain.entity.EventEntity.java"
+          p:id="101"
+          p:title="Fantastic World After Corona"
+          p:date="2020-12-12"/>
+    <bean id="ticketEntity" class="com.springbootintro.business.service.TicketEntity.java"
+          p:id="201"
+          p:eventEntity-ref="eventEntity"
+          p:userEntity-ref="userEntity"
+          p:category="PREMIUM"
+          p:place="18"/>
+    <bean id="userEntity" class="com.springbootintro.business.service.UserEntity.java"
+          p:id="301"
+          p:name="John Doe"
+          p:email="john.doe@gmail.com"/>
+
+    <!--  POST PROCESSOR BEAN -->
+    <bean id="customBeanPostProcessor" class="com.springbootintro.processors.BookingBeanPostProcessor.java"/>
+
+</beans>
